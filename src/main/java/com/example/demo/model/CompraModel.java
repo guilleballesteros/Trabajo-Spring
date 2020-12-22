@@ -7,16 +7,16 @@ public class CompraModel {
 	private int id;
 	private Date fecha;
 	private float precio;
-	private int idPaciente;
+	private PacientesModel Paciente;
 	public CompraModel() {
 		super();
 	}
-	public CompraModel(int id, Date fecha, float precio, int idPaciente) {
+	public CompraModel(int id, Date fecha, float precio, PacientesModel idPaciente) {
 		super();
 		this.id = id;
 		this.fecha = fecha;
 		this.precio = precio;
-		this.idPaciente = idPaciente;
+		this.Paciente = idPaciente;
 	}
 	public int getId() {
 		return id;
@@ -36,11 +36,11 @@ public class CompraModel {
 	public void setPrecio(float precio) {
 		this.precio = precio;
 	}
-	public int getIdPaciente() {
-		return idPaciente;
+	public PacientesModel getPaciente() {
+		return Paciente;
 	}
-	public void setIdPaciente(int idPaciente) {
-		this.idPaciente = idPaciente;
+	public void setPaciente(PacientesModel idPaciente) {
+		this.Paciente = idPaciente;
 	}
 	
 }
