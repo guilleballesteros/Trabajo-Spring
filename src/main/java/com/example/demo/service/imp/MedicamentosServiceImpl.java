@@ -1,6 +1,7 @@
 package com.example.demo.service.imp;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,32 +23,28 @@ public class MedicamentosServiceImpl implements MedicamentosService{
 	
 	@Override
 	public List<MedicamentoModel> listAllMedicamentos() {
-		// TODO Auto-generated method stub
-		return null;
+		return medicamentoRep.findAll().stream().map(c->transform(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public MedicamentoModel findModel(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return transform(medicamentoRep.findById(id).orElse(null));
 	}
 
 	@Override
 	public Medicamento addMedicamento(MedicamentoModel medicamentoModel) {
-		// TODO Auto-generated method stub
-		return null;
+		return medicamentoRep.save(transform(medicamentoModel));
 	}
 
 	@Override
 	public int removeMedicamento(int id) {
-		// TODO Auto-generated method stub
+		medicamentoRep.deleteById(id);
 		return 0;
 	}
 
 	@Override
 	public Medicamento updateMedicamento(MedicamentoModel medicamentoModel) {
-		// TODO Auto-generated method stub
-		return null;
+		return medicamentoRep.save(transform(medicamentoModel));
 	}
 
 	@Override
