@@ -5,8 +5,6 @@ import java.util.List;
 import com.example.demo.entity.Paciente;
 import com.example.demo.model.PacientesModel;
 
-
-
 public interface PacienteService {
 	List<PacientesModel> listAllPaciente();
 	PacientesModel findModel(int id);
