@@ -1,4 +1,4 @@
-package com.example.demo.configuration;
+package com.example.demo.controller;
 
 import javax.validation.Valid;
 
@@ -15,8 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.MedicamentoModel;
-//import com.example.demo.service.MedicamentosService;
-import com.example.demo.service.imp.MedicamentosServiceImpl;
+import com.example.demo.service.MedicamentosService;
 
 
 @Controller
@@ -28,7 +27,7 @@ public class MedicamentosController {
 
 	@Autowired
 	@Qualifier("MedicamentosService")
-	private MedicamentosServiceImpl medicamentosServ;
+	private MedicamentosService medicamentosServ;
 	
 	
 	@GetMapping("/list")

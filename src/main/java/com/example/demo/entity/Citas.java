@@ -25,7 +25,6 @@ public class Citas {
 	private String observaciones;
 	
 	public Citas(int id, Paciente paciente, Medico medico, Date fecha, String observaciones) {
-		super();
 		this.id = id;
 		this.paciente = paciente;
 		this.medico = medico;
