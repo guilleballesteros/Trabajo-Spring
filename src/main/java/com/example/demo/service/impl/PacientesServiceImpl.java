@@ -39,7 +39,7 @@ public class PacientesServiceImpl implements PacienteService {
 	}
 
 	@Override
-	public int removeMedicamento(int id) {
+	public int removePaciente(int id) {
 		pacienteRep.deleteById(id);
 		return 0;
 	}

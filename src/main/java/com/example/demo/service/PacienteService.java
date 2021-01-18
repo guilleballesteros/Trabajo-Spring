@@ -9,7 +9,7 @@ public interface PacienteService {
 	List<PacientesModel> listAllPaciente();
 	PacientesModel findModel(int id);
 	Paciente addPaciente(PacientesModel pacienteModel);
-	int removeMedicamento(int id);
+	int removePaciente(int id);
 	Paciente transform(PacientesModel medicamentoModel);
 	PacientesModel transform(Paciente medicamento);
 	Paciente updatePaciente(PacientesModel medicamentoModel);

@@ -6,16 +6,15 @@ import java.util.stream.Collectors;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.MedicoRepositorio;
-
 import com.example.demo.entity.Medico;
-
 import com.example.demo.model.MedicosModel;
 import com.example.demo.service.MedicosService;
 
 
-
+@Service("MedicosService")
 public class MedicosServiceImpl implements MedicosService {
 
 	@Autowired

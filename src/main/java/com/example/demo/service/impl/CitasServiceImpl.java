@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.CitasRepositorio;
 import com.example.demo.entity.Citas;
 import com.example.demo.model.CitasModel;
 import com.example.demo.service.CitasService;
 
+@Service("CitasService")
 public class CitasServiceImpl implements CitasService{
 	
 	@Autowired
