@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.CompraRepositorio;
 import com.example.demo.entity.Compra;
 import com.example.demo.model.CompraModel;
 import com.example.demo.service.CompraService;
 
+@Service("CompraService")
 public class CompraServiceImpl implements CompraService{
 	
 	@Autowired

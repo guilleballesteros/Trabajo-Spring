@@ -6,14 +6,16 @@ import java.util.stream.Collectors;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.PacienteRepositorio;
-import com.example.demo.entity.Medicamento;
+
 import com.example.demo.entity.Paciente;
-import com.example.demo.model.MedicamentoModel;
+
 import com.example.demo.model.PacientesModel;
 import com.example.demo.service.PacienteService;
 
+@Service("PacienteService")
 public class PacientesServiceImpl implements PacienteService {
 
 	@Autowired
@@ -39,7 +41,7 @@ public class PacientesServiceImpl implements PacienteService {
 	}
 
 	@Override
-	public int removeMedicamento(int id) {
+	public int removePaciente(int id) {
 		pacienteRep.deleteById(id);
 		return 0;
 	}
