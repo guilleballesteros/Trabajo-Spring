@@ -14,3 +14,4 @@ import com.example.demo.model.MedicosModel;
 public interface MedicoRepositorio extends JpaRepository<Medico, Serializable>{
 	//public   abstract List<Citas> getCitas(MedicosModel medicosModel);
 }
+  
