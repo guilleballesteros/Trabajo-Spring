@@ -10,34 +10,45 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-light">
 			<tr>
-				<th>Description</th>
 				<th>Name</th>
+				<th>Description</th>
+				<th>Prescription</th>
 				<th>Price</th>
-				<th>Hours</th>
+				<th>stock</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
-		<tbody th:each="course: ${courses}">
-			<th th:text="${course.name}"></th>
-			<th th:text="${course.description}"></th>
-			<th th:text="${course.price}"></th>
-			<th th:text="${course.hours}"></th>	
+		<tbody th:each="medicamento: ${medicamentos}">
+			<th th:text="${medicamento.nombre}"></th>
+			<th th:text="${medicamento.descripcion}"></th>
 			<th>
-				<a th:href="@{/courses/formCourse/}+${course.id}">
+				<span th:if="${medicamento.receta}=='s'"><i class="fas fa-check"></i></span>
+				<span th:if="${medicamento.receta}=='n'"><i class="fas fa-times"></i></span>
+			
+			</th>
+			<th th:text="${medicamento.precio}"></th>	
+			<th th:text="${medicamento.stock}"></th>	
+			<th>
+				<a th:href="@{/medicamentos/form/}+${medicamento.id}">
                   <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
                	</a>
-				<a th:href="@{/courses/deleteCourse/}+${course.id}">
+				<a th:href="@{/medicamentos/delete/}+${medicamento.id}">
 					<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
-				</a>
-				<a th:href="@{/courses/showStudents/} + ${course.id}">
-					<button type="button" class="btn btn-default"><i class="fas fa-user-graduate"></i></button>
 				</a>
 			
 			</th>	
 		</tbody>
+		<tfoot>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Prescription</th>
+			<th>Price</th>
+			<th>stock</th>
+			<th>Actions</th>
+		</tfoot>
 	</table>
-	<a th:href="@{/courses/formCourse}">
-		<button type="button" class="btn btn-primary">New Course</button>
+	<a th:href="@{/medicamentos/form}">
+		<button type="button" class="btn btn-primary">New medicine</button>
 	</a>
 </body>
 </html>
