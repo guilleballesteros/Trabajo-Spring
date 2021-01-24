@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+
 public class CompraMedicamento {
 
 	@JoinColumn(name="idMedicamento")

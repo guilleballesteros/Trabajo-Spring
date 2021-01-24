@@ -9,5 +9,5 @@ import com.example.demo.entity.Citas;
 
 @Repository("CitasRepositorio")
 public interface CitasRepositorio extends JpaRepository<Citas, Serializable> {
-
+	
 }
