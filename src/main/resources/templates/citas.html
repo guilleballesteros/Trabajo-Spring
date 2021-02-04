@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+	<table class="table table-striped table-bordered">
+		<thead class="thead-light">
+			<tr>
+				<th>IdPaciente</th>
+				<th>IdMedico</th>
+				<th>Fecha</th>
+				<th>Observaciones</th>
+			</tr>
+		</thead>
+		<tbody th:each="cita: ${citas}">
+			<th th:text="${cita.idPaciente}"></th>
+			<th th:text="${cita.idMedico}"></th>
+			<th th:text="${cita.fecha}"></th>	
+			<th th:text="${cita.observaciones}"></th>	
+			<th>
+				<a th:href="@{/citas/form/}+${cita.id}">
+                  <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+               	</a>
+				<a th:href="@{/medicamentos/delete/}+${medicamento.id}">
+					<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
+				</a>
+			
+			</th>	
+		</tbody>
+		<tfoot>
+			<th>IdPaciente</th>
+			<th>IdMedico</th>
+			<th>Fecha</th>
+			<th>Observaciones</th>
+		</tfoot>
+	</table>
+	<a th:href="@{/citas/form}">
+		<button type="button" class="btn btn-primary">New cita</button>
+	</a>
+</body>
+</html>
