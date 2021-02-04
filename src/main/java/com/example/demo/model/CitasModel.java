@@ -5,14 +5,14 @@ import java.util.Date;
 public class CitasModel {
 
 	private int id;
-	private int idPaciente;
-	private int idMedico;
+	private UserModel idPaciente;
+	private UserModel idMedico;
 	private Date fecha;
 	private String observaciones;
 	public CitasModel() {
 		super();
 	}
-	public CitasModel(int id, int idPaciente, int idMedico, Date fecha, String observaciones) {
+	public CitasModel(int id, UserModel idPaciente, UserModel idMedico, Date fecha, String observaciones) {
 		super();
 		this.id = id;
 		this.idPaciente = idPaciente;
@@ -26,16 +26,16 @@ public class CitasModel {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getIdPaciente() {
+	public UserModel getIdPaciente() {
 		return idPaciente;
 	}
-	public void setIdPaciente(int idPaciente) {
+	public void setIdPaciente(UserModel idPaciente) {
 		this.idPaciente = idPaciente;
 	}
-	public int getIdMedico() {
+	public UserModel getIdMedico() {
 		return idMedico;
 	}
-	public void setIdMedico(int idMedico) {
+	public void setIdMedico(UserModel idMedico) {
 		this.idMedico = idMedico;
 	}
 	public Date getFecha() {

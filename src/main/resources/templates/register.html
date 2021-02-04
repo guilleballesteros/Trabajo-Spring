@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}"/>
+<link rel="stylesheet" th:href="@{/webjars/jquery/3.5.1/jquery.min.js}"/>
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
-	<form action="#" th:action="@{/users/addPaciente}" th:object="${paciente}" method="post" enctype="multipart/form-data">
-		<h1 th:text="${paciente.id != 0} ? 'Editar paciente' : 'Nuevo paciente' ">
-		</h1>
-		<input type="hidden" th:field="*{id}" id="id">
+	<div class="container">
+	<form action="#" th:action="@{/auth/register}" th:object="${user}" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="username" class="sr-only">Username</label>
 			<input type="text" th:field="*{username}" class="form-control" id="username" name="username" placeholder="Username"/>
@@ -39,12 +40,9 @@
 			<label for="file">Foto</label>
 			<input if="filebutton" name="file" class="form-control input-file" type="file">
 		</div>
-		<a th:href="@{/users/listPacientes}">
-			<button type="button" class="btn btn-secondary"><i class="fas fa-arrow-circle-left"></i></button>
-		</a>
-		<input type="submit" class="btn btn-primary"/>
 		
+		<input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit" value="Sign up"/>
 	</form>
-	
+	</div>
 </body>
 </html>

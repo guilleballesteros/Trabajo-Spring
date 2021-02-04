@@ -23,9 +23,9 @@ public class Compra {
 	
 	@ManyToOne
 	@JoinColumn(name="idPaciente")
-	private Paciente paciente;
+	private User paciente;
 
-	public Compra(int id, Date fecha, float precio, Paciente paciente) {
+	public Compra(int id, Date fecha, float precio, User paciente) {
 		this.id = id;
 		this.fecha = fecha;
 		this.precio = precio;
@@ -58,11 +58,11 @@ public class Compra {
 		this.precio = precio;
 	}
 
-	public Paciente getPaciente() {
+	public User getPaciente() {
 		return paciente;
 	}
 
-	public void setPaciente(Paciente paciente) {
+	public void setPaciente(User paciente) {
 		this.paciente = paciente;
 	}
 	

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -10,41 +10,45 @@
 	<table class="table table-striped table-bordered">
 		<thead class="thead-light">
 			<tr>
+				<th>Photo</th>
 				<th>Name</th>
 				<th>Last name</th>
 				<th>Age</th>
 				<th>Address</th>
-				<th>Photo</th>
 				<th>Username</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody th:each="paciente: ${pacientes}">
+			<th><img th:src="${#strings.isEmpty(paciente.foto)} ? 'http://localhost:8080/files/default.png' :  ${paciente.foto}" 
+				class="img-response rounded-circle center-block" alt="Image"
+				style="height: 40px; width: 40px"></th>
 			<th th:text="${paciente.nombre}"></th>
 			<th th:text="${paciente.apellidos}"></th>
 			<th th:text="${paciente.edad}"></th>
 			<th th:text="${paciente.direccion}"></th>	
-			<th th:text="${paciente.foto}"></th>	
 			<th th:text="${paciente.username}"></th>
 			<th>
-				<a th:href="@{/pacientes/form/}+${paciente.id}">
+				<a th:href="@{/users/formPaciente/}+${paciente.id}">
                   <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
                	</a>
-				<a th:href="@{/pacientes/delete/}+${paciente.id}">
+				<a th:href="@{/users/deletePaciente/}+${paciente.id}">
 					<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
 				</a>
 			
 			</th>	
 		</tbody>
 		<tfoot>
+			<th>Photo</th>
 			<th>Name</th>
 			<th>Last name</th>
 			<th>Age</th>
 			<th>Address</th>
-			<th>Photo</th>
 			<th>Username</th>
+			<th>Actions</th>
 		</tfoot>
 	</table>
-	<a th:href="@{/pacientes/form}">
+	<a th:href="@{/users/formPaciente}">
 		<button type="button" class="btn btn-primary">New paciente</button>
 	</a>
 </body>

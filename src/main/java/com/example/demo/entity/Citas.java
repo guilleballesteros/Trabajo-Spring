@@ -18,15 +18,15 @@ public class Citas {
 	private int id;
 	@ManyToOne
 	@JoinColumn(name="idPaciente")
-	private Paciente paciente;
+	private User paciente;
 	@ManyToOne
 	@JoinColumn(name="idMedico")
-	private Medico medico;
+	private User medico;
 	@Column(length=100)
 	private Date fecha;
 	private String observaciones;
 	
-	public Citas(int id, Paciente paciente, Medico medico, Date fecha, String observaciones) {
+	public Citas(int id, User paciente, User medico, Date fecha, String observaciones) {
 		this.id = id;
 		this.paciente = paciente;
 		this.medico = medico;
@@ -39,16 +39,16 @@ public class Citas {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Paciente getPaciente() {
+	public User getPaciente() {
 		return paciente;
 	}
-	public void setPaciente(Paciente paciente) {
+	public void setPaciente(User paciente) {
 		this.paciente = paciente;
 	}
-	public Medico getMedico() {
+	public User getMedico() {
 		return medico;
 	}
-	public void setMedico(Medico medico) {
+	public void setMedico(User medico) {
 		this.medico = medico;
 	}
 	public Date getFecha() {
