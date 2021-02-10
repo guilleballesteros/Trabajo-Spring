@@ -9,7 +9,6 @@ public class MedicamentoModel {
 	private float precio;
 	private int stock;
 	public MedicamentoModel() {
-		super();
 	}
 	public MedicamentoModel(int id, String nombre, String descripcion, String receta, float precio, int stock) {
 		super();

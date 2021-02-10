@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +14,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.model.CarritoModel;
 import com.example.demo.model.CompraModel;
+import com.example.demo.model.MedicamentoModel;
 import com.example.demo.service.CompraService;
+import com.example.demo.service.MedicamentosService;
 
 
 @Controller
@@ -24,6 +33,14 @@ public class ComprasController {
 
 	private static final String COMPRAS_VIEW="compra";
 	private static final String FORM_VIEW="comprasForm";
+	private static final String CARRITO="carrito";
+	
+	@Autowired
+	private HttpSession session;
+	
+	@Autowired
+	@Qualifier("MedicamentosService")
+	private MedicamentosService medicamentosServ;
 
 	@Autowired
 	@Qualifier("CompraService")
@@ -76,5 +93,52 @@ public class ComprasController {
 			flash.addAttribute("success", "No se ha podido eliminar la Compra");
 		}
 		return "redirect:/compras/list";
+	}
+	
+	@GetMapping("/carrito")
+	public ModelAndView carrito() {
+		ModelAndView mav=new ModelAndView(CARRITO);
+		return mav;
+	}
+	
+	@SuppressWarnings("null")
+	@PostMapping("/addCarrito/{id}")
+	public String addCarrito(@PathVariable("id") int id, @RequestParam("cantidad") int cantidad,RedirectAttributes flash) {
+		boolean comp=false;
+		float precioF=0;
+		MedicamentoModel medicamento=medicamentosServ.findModel(id);
+		@SuppressWarnings("unchecked")
+		List<CarritoModel> carrito=(List<CarritoModel>) session.getAttribute("carrito");
+		if(medicamento.getStock()>=cantidad) {
+			if(carrito==null) {
+				session.setAttribute("productos", cantidad);
+				carrito=new ArrayList<CarritoModel>();
+				carrito.add(new CarritoModel(medicamento,cantidad,medicamento.getPrecio()*cantidad));
+			}
+			else {
+				session.setAttribute("productos",(Integer) session.getAttribute("productos")+cantidad);
+				for(CarritoModel a:carrito) {
+					if(a.getMedicamento().getId()==medicamento.getId()) {
+						a.setNum(a.getNum()+cantidad);
+						a.setPrecio(a.getPrecio()+(medicamento.getPrecio()*cantidad));
+						comp=true;
+					}
+				}
+				if(!comp) {
+					carrito.add(new CarritoModel(medicamento,cantidad, medicamento.getPrecio()*cantidad));
+				}
+			}
+			for(CarritoModel a: carrito) {
+				precioF+=a.getPrecio();
+			}
+			session.setAttribute("precioF", precioF);
+			session.setAttribute("carrito", carrito);
+			flash.addAttribute("success", "medicine added to de shopping cart");
+		}
+		else {
+			flash.addAttribute("error", "we dont have enought stock");
+		}
+		return "redirect:/medicamentos/list";
+		
 	}
 }

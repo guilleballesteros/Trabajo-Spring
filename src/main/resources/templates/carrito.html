@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head th:replace="layout :: head">
+</head>
+<body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<div class="wrapper">
+	<header th:replace="layout :: header"></header>
+	<aside th:replace="layout :: aside"></aside>
+	<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1><i class="fas fa-shopping-cart"></i>
+         Shopping cart
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Layout</a></li>
+        <li class="active">Collapsed Sidebar</li>
+      </ol>
+    </section>
+	<section class="content" th:fragment="content">
+	     <div class="card card-default">
+	     	<div class="card-body">
+	     		<table class="table table-striped table-bordered" id="data">
+					<thead class="thead-light">
+						<tr>
+							<th>Name</th>
+							<th>Number</th>
+							<th>prize</th>
+							<th>Total</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody th:if="${session.carrito!=null}">
+						<tr th:each="producto: ${session.carrito}">
+							<th th:text="${producto.medicamento.nombre}"></th>
+							<th th:text="${producto.num}"></th>
+							<th th:text="${producto.medicamento.precio}"></th>
+							<th th:text="${producto.precio}"></th>
+							<th>
+								<a class="btn btn-danger btn-xs" href="">
+									<i class="fas fa-trash"></i>
+								</a>
+							
+							</th>	
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>Name</th>
+							<th>Number</th>
+							<th>prize</th>
+							<th>Actions</th>
+						</tr>
+					</tfoot>
+				</table>
+				<h1 th:if="${session.carrito!=null}"  th:text="${'Total: '+session.precioF+' euros'}"></h1>
+				<a th:href="@{/users/formPaciente}">
+					<button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Buy</button>
+				</a>
+				
+	     	</div>
+	     </div>
+	</section>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer th:replace="layout :: footer"></footer>
+  <aside th:replace="layout :: aside2"></aside>
+  <div class="control-sidebar-bg"></div>
+</div>
+	<th:block th:replace="layout :: assets"></th:block>
+</body>
+</html>

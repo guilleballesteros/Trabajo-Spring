@@ -1,7 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -12,9 +18,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.model.CarritoModel;
 import com.example.demo.model.MedicamentoModel;
 import com.example.demo.service.MedicamentosService;
 
@@ -23,8 +31,11 @@ import com.example.demo.service.MedicamentosService;
 @RequestMapping("/medicamentos")
 public class MedicamentosController {
 	
+	
 	private static final String MEDICAMENTOS_VIEW="medicamentos";
 	private static final String FORM_VIEW="medicamentosForm";
+	
+	private static final Log Logger=LogFactory.getLog(UserController.class);
 
 	@Autowired
 	@Qualifier("MedicamentosService")
@@ -79,4 +90,6 @@ public class MedicamentosController {
 		}
 		return "redirect:/medicamentos/list";
 	}
+	
+	
 }
