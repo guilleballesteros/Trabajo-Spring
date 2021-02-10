@@ -46,12 +46,17 @@
 							<th th:text="${medicamento.precio}"></th>	
 							<th th:text="${medicamento.stock}"></th>	
 							<th>
-								<a th:href="@{/medicamentos/form/}+${medicamento.id}">
+								<a sec:authorize="hasRole('ROLE_MEDICO')" th:href="@{/medicamentos/form/}+${medicamento.id}">
 				                  <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
 				               	</a>
-								<a th:href="@{/medicamentos/delete/}+${medicamento.id}">
+								<a sec:authorize="hasRole('ROLE_MEDICO')" th:href="@{/medicamentos/delete/}+${medicamento.id}">
 									<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
 								</a>
+								
+								<form action="#">
+									<input type="number" step="any" name="cantidad" value="1"/>
+									<input type="submit" value="Buy">
+								</form>
 							
 							</th>
 						</tr>	

@@ -168,11 +168,23 @@
               <span class="label label-primary pull-right">2</span>
             </span>
           </a>
-          <ul class="treeview-menu">
+          <ul sec:authorize="hasRole('ROLE_PACIENTE')" class="treeview-menu">
             <li><a th:href="@{/citas/form}">Apply for <i class="far fa-calendar-alt"></i></a></li>
             <li><a th:href="@{/pacientes/listCitas}">View <i class="fas fa-eye"></i></a></li>
             </li>
           </ul>
+          <ul sec:authorize="hasRole('ROLE_MEDICO')" class="treeview-menu">
+            <li><a th:href="@{/citas/list}">View <i class="fas fa-eye"></i></a></li>
+          </ul>
+        </li>
+        <li sec:authorize="hasRole('ROLE_PACIENTE')">
+          <a th:href="@{/medicamentos/list}">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Shop</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">2</span>
+            </span>
+          </a>
         </li>
         <li class="treeview">
           <a href="#">
