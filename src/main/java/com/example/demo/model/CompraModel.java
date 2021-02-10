@@ -2,9 +2,16 @@ package com.example.demo.model;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class CompraModel {
 
 	private int id;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha;
 	private float precio;
 	private UserModel Paciente;

@@ -18,7 +18,7 @@ import com.example.demo.service.ComprasMedicamentosService;
 @Service("ComprasMedicamentosService")
 public class ComprasMedicamentosServiceImpl implements ComprasMedicamentosService{
 	@Autowired
-	@Qualifier("CompraMedicamentoRepositorio")
+	@Qualifier("CompraMedicamento")
 	private CompraMedicamentoRepositorio compramedicamentoRep;
 	
 	@Autowired

@@ -420,6 +420,12 @@
     </div>
   </aside>
   <!-- /.control-sidebar -->
+  
+  <th:block th:fragment="alerts">
+  	<div class="alert alert-success" th:if="${success!=null}" th:text="${success}"></div>
+  	<div class="alert alert-danger" th:if="${error!=null}" th:text="${error}"></div>
+  	<div class="alert alert-warning" th:if="${info!=null}" th:text="${info}"></div>
+  </th:block>
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
 <div class="control-sidebar-bg"></div>

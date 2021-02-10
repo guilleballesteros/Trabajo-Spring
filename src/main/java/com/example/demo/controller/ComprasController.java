@@ -1,13 +1,18 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,10 +26,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.CarritoModel;
+import com.example.demo.model.CompraMedicamentoKeyModel;
+import com.example.demo.model.CompraMedicamentoModel;
 import com.example.demo.model.CompraModel;
 import com.example.demo.model.MedicamentoModel;
+import com.example.demo.model.UserModel;
 import com.example.demo.service.CompraService;
+import com.example.demo.service.ComprasMedicamentosService;
 import com.example.demo.service.MedicamentosService;
+import com.example.demo.service.impl.UserServiceImpl;
 
 
 @Controller
@@ -35,13 +45,24 @@ public class ComprasController {
 	private static final String FORM_VIEW="comprasForm";
 	private static final String CARRITO="carrito";
 	
+	private static final Log Logger=LogFactory.getLog(UserController.class);
+	
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	@Qualifier("userService")
+	private UserServiceImpl userServ;
 	
 	@Autowired
 	@Qualifier("MedicamentosService")
 	private MedicamentosService medicamentosServ;
 
+	
+	@Autowired
+	@Qualifier("ComprasMedicamentosService")
+	private ComprasMedicamentosService relacionServ;
+	
 	@Autowired
 	@Qualifier("CompraService")
 	private CompraService comprasServ;
@@ -87,10 +108,10 @@ public class ComprasController {
 	@GetMapping("/delete/{id}")
 	public String deleteCompra(@PathVariable("id") int id, RedirectAttributes flash) {
 		if(comprasServ.removeCompra(id)==0) {
-			flash.addAttribute("success","Compra eliminado satisfactoriamente");
+			flash.addFlashAttribute("success","Compra eliminado satisfactoriamente");
 		}
 		else {
-			flash.addAttribute("success", "No se ha podido eliminar la Compra");
+			flash.addFlashAttribute("success", "No se ha podido eliminar la Compra");
 		}
 		return "redirect:/compras/list";
 	}
@@ -133,12 +154,92 @@ public class ComprasController {
 			}
 			session.setAttribute("precioF", precioF);
 			session.setAttribute("carrito", carrito);
-			flash.addAttribute("success", "medicine added to de shopping cart");
+			flash.addFlashAttribute("success", "Product added to de shopping cart");
 		}
 		else {
-			flash.addAttribute("error", "we dont have enought stock");
+			flash.addFlashAttribute("error", "we dont have enought stock");
 		}
 		return "redirect:/medicamentos/list";
 		
+	}
+	
+	@PostMapping("/removeCarrito/{id}")
+	
+	public String removeCarrito(@PathVariable("id") int id, @RequestParam("cantidad") int cantidad,RedirectAttributes flash) {
+		float precioF=0;
+		MedicamentoModel medicamento=medicamentosServ.findModel(id);
+		@SuppressWarnings("unchecked")
+		List<CarritoModel> carrito=(List<CarritoModel>) session.getAttribute("carrito");
+		if(cantidad>0) {
+			for(CarritoModel a:carrito) {
+				if(a.getMedicamento().getId()==medicamento.getId()) {
+					if(a.getNum()>cantidad) {
+						a.setNum(a.getNum()-cantidad);
+						a.setPrecio(a.getPrecio()-(medicamento.getPrecio()*cantidad));
+					}else if (a.getNum()<cantidad) {
+						flash.addFlashAttribute("error", "You can't delete more than you have");
+						return "redirect:/compras/carrito";
+					}
+					else {
+						Logger.info("antes");
+						carrito.remove(carrito.indexOf(a));
+						Logger.info("despues");
+						break;
+					}
+				}
+			}
+			Logger.info("antes del if");
+			if(carrito.isEmpty()) {
+				Logger.info("Dentro del if");
+				session.removeAttribute("carrito");
+				session.removeAttribute("precioF");
+				session.removeAttribute("productos");
+			}
+			else {
+				Logger.info("hola");
+				for(CarritoModel a: carrito) {
+					precioF+=a.getPrecio();
+				}
+				session.setAttribute("carrito", carrito);
+				session.setAttribute("precioF", precioF);
+				session.setAttribute("productos",(Integer) session.getAttribute("productos")-cantidad);
+			}
+			
+			Logger.info("adios");
+			flash.addFlashAttribute("success", "Product deleted from the shopping cart");
+		}
+		return "redirect:/compras/carrito";
+	}
+	
+	@GetMapping("/comprar")
+	public String comprar(RedirectAttributes flash) {
+		@SuppressWarnings("unchecked")
+		List<CarritoModel> carrito=(List<CarritoModel>) session.getAttribute("carrito");
+		if(carrito!= null) {
+			UserDetails userDetails= (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserModel paciente=userServ.findByUsername(userDetails.getUsername());
+			CompraModel compra=new CompraModel();
+			compra.setFecha(new Date());
+			compra.setPaciente(paciente);
+			compra.setPrecio((Float)session.getAttribute("precioF"));
+			compra=comprasServ.transform(comprasServ.addCompra(compra));
+			
+			for(CarritoModel a:carrito) {
+				CompraMedicamentoModel relacion=new CompraMedicamentoModel(new CompraMedicamentoKeyModel(a.getMedicamento().getId(),compra.getId()),a.getMedicamento().getId(), compra.getId());
+				relacionServ.addCompraMedicamento(relacion);
+				
+			}
+			
+			session.removeAttribute("carrito");
+			session.removeAttribute("precioF");
+			session.removeAttribute("productos");
+			flash.addFlashAttribute("success","Purchase done successfully");
+			
+		}
+		else {
+			flash.addFlashAttribute("error","The shopping cart is empty");
+		}
+		
+		return "redirect:/compras/carrito";
 	}
 }

@@ -42,14 +42,10 @@ public class ComprasMedicamentosController {
 			return FORM_VIEW;
 		}
 		else {
-			if(compramedicamentoModel.getId()==0 ) {
+			
 				compramedicamentosServ.addCompraMedicamento(compramedicamentoModel);
 				flash.addFlashAttribute("success","Medicamento insertado exitosamente");
-			}
-			else {
-				compramedicamentosServ.updateCompraMedicamento(compramedicamentoModel);
-				flash.addFlashAttribute("success","Medicamento Actualizado exitosamente");
-			}
+			
 			return "redirect:/medicamentos/list";
 		}
 		

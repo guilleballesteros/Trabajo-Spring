@@ -20,6 +20,7 @@
         <li class="active">Collapsed Sidebar</li>
       </ol>
     </section>
+    <th:block th:replace="layout :: alerts"></th:block>
 	<section class="content" th:fragment="content">
 	     <div class="card card-default">
 	     	<div class="card-body">
@@ -40,9 +41,10 @@
 							<th th:text="${producto.medicamento.precio}"></th>
 							<th th:text="${producto.precio}"></th>
 							<th>
-								<a class="btn btn-danger btn-xs" href="">
-									<i class="fas fa-trash"></i>
-								</a>
+								<form th:action="@{/compras/removeCarrito/}+${producto.medicamento.id}"  method="post">
+									<input type="number" step="any" name="cantidad" value="1"/>
+									<input type="submit" value="Remove">
+								</form>
 							
 							</th>	
 						</tr>
@@ -52,15 +54,15 @@
 							<th>Name</th>
 							<th>Number</th>
 							<th>prize</th>
+							<th>Total</th>
 							<th>Actions</th>
 						</tr>
 					</tfoot>
 				</table>
 				<h1 th:if="${session.carrito!=null}"  th:text="${'Total: '+session.precioF+' euros'}"></h1>
-				<a th:href="@{/users/formPaciente}">
-					<button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Buy</button>
+				<a th:href="@{/compras/comprar}">
+					<button type="button" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Buy</button>
 				</a>
-				
 	     	</div>
 	     </div>
 	</section>

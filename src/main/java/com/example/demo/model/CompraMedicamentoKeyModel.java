@@ -1,24 +1,21 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class CompraMedicamentoKey implements Serializable{
+public class CompraMedicamentoKeyModel {
 	
-	@Column(name= "medicamento_id")
+	
 	int medicamentoId;
 	
-	@Column(name= "compra_id")
 	int compraId;
 
-	public CompraMedicamentoKey(int medicamentoId, int compraId) {
+	public CompraMedicamentoKeyModel(int medicamentoId, int compraId) {
 		this.medicamentoId = medicamentoId;
 		this.compraId = compraId;
 	}
-	public CompraMedicamentoKey() {}
+	public CompraMedicamentoKeyModel() {}
 	
 
 	public int getMedicamentoId() {
@@ -33,8 +30,5 @@ public class CompraMedicamentoKey implements Serializable{
 	public void setCompraId(int compraId) {
 		this.compraId = compraId;
 	}
-	
-	
-	
 
 }
