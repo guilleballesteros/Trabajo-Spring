@@ -1,49 +1,47 @@
 package com.example.demo.entity;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 
 @Entity
 public class CompraMedicamento {
 	
-	@EmbeddedId
-	CompraMedicamentoKey id;
-	@ManyToOne
-	@MapsId("IdMedicamento")
-	@JoinColumn(name="idMedicamento")
-	private Medicamento medicamento;
-	@ManyToOne
-	@MapsId("IdCompra")
-	@JoinColumn(name="idCompra")
-	private Compra compra;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
 	
-	public CompraMedicamento(CompraMedicamentoKey id, Medicamento medicamento, Compra compra) {
-		this.id = id;
+	@ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "Id_medicamento")
+    private Medicamento medicamento;
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="Id_Compra")
+    private Compra compra;
+
+	public CompraMedicamento(Medicamento medicamento, Compra compra) {
 		this.medicamento = medicamento;
 		this.compra = compra;
 	}
-	
+
 	public CompraMedicamento() {}
 	
-	public CompraMedicamentoKey getId() {
-		return id;
-	}
-
-	public void setId(CompraMedicamentoKey id) {
-		this.id = id;
-	}
 	public Medicamento getMedicamento() {
 		return medicamento;
 	}
+
 	public void setMedicamento(Medicamento medicamento) {
 		this.medicamento = medicamento;
 	}
+
 	public Compra getCompra() {
 		return compra;
 	}
+
 	public void setCompra(Compra compra) {
 		this.compra = compra;
 	}

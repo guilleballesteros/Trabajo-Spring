@@ -26,14 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.CarritoModel;
-import com.example.demo.model.CompraMedicamentoKeyModel;
 import com.example.demo.model.CompraMedicamentoModel;
 import com.example.demo.model.CompraModel;
 import com.example.demo.model.MedicamentoModel;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.CompraService;
-import com.example.demo.service.ComprasMedicamentosService;
 import com.example.demo.service.MedicamentosService;
+import com.example.demo.service.impl.ComprasMedicamentosServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 
@@ -61,7 +60,7 @@ public class ComprasController {
 	
 	@Autowired
 	@Qualifier("ComprasMedicamentosService")
-	private ComprasMedicamentosService relacionServ;
+	private ComprasMedicamentosServiceImpl relacionServ;
 	
 	@Autowired
 	@Qualifier("CompraService")
@@ -225,8 +224,10 @@ public class ComprasController {
 			compra=comprasServ.transform(comprasServ.addCompra(compra));
 			
 			for(CarritoModel a:carrito) {
-				CompraMedicamentoModel relacion=new CompraMedicamentoModel(new CompraMedicamentoKeyModel(a.getMedicamento().getId(),compra.getId()),a.getMedicamento().getId(), compra.getId());
+				CompraMedicamentoModel relacion=new CompraMedicamentoModel(a.getMedicamento(), compra);
 				relacionServ.addCompraMedicamento(relacion);
+				
+				
 				
 			}
 			

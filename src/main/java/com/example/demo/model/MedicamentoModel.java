@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 public class MedicamentoModel {
 
 	private int id;
@@ -8,6 +10,7 @@ public class MedicamentoModel {
 	private String receta;
 	private float precio;
 	private int stock;
+	private List<CompraModel> compras;
 	public MedicamentoModel() {
 	}
 	public MedicamentoModel(int id, String nombre, String descripcion, String receta, float precio, int stock) {
@@ -19,6 +22,15 @@ public class MedicamentoModel {
 		this.precio = precio;
 		this.stock = stock;
 	}
+	
+
+	public List<CompraModel> getCompras() {
+		return compras;
+	}
+	public void setCompras(List<CompraModel> compras) {
+		this.compras = compras;
+	}
+	
 	public int getId() {
 		return id;
 	}

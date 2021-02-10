@@ -1,18 +1,18 @@
 package com.example.demo.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 @Entity
 public class Medicamento {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -23,21 +23,28 @@ public class Medicamento {
 	private float precio;
 	private int stock;
 	
-	@OneToMany(mappedBy="medicamento")
-	private List<CompraMedicamento> compras;
-
-	public Medicamento(int id, String nombre, String descripcion, String receta, float precio, int stock,
-			List<CompraMedicamento> compras) {
+	
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="medicamento")
+	private Set<CompraMedicamento> compras;
+	
+	public Medicamento(int id, String nombre, String descripcion, String receta, float precio, int stock) {
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.receta = receta;
 		this.precio = precio;
 		this.stock = stock;
-		this.compras = compras;
 	}
 	public Medicamento() {}
 	
+	
+
+	public Set<CompraMedicamento> getCompras() {
+		return compras;
+	}
+	public void setCompras(Set<CompraMedicamento> compras) {
+		this.compras = compras;
+	}
 	public int getId() {
 		return id;
 	}
@@ -73,12 +80,6 @@ public class Medicamento {
 	}
 	public void setStock(int stock) {
 		this.stock = stock;
-	}
-	public List<CompraMedicamento> getCompras() {
-		return compras;
-	}
-	public void setCompras(List<CompraMedicamento> comprasM) {
-		this.compras = comprasM;
 	}
 	
 	

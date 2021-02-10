@@ -2,10 +2,11 @@ package com.example.demo.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class Compra {
 
+	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -33,9 +36,9 @@ public class Compra {
 	@JoinColumn(name="idPaciente")
 	private User paciente;
 	
-	@OneToMany(mappedBy="compra")
-	private List<CompraMedicamento> medicamentos;
-
+	 @OneToMany(fetch=FetchType.EAGER, mappedBy="compra")
+	  private Set<CompraMedicamento> medicamentos;
+	
 	public Compra(int id, Date fecha, float precio, User paciente) {
 		this.id = id;
 		this.fecha = fecha;
@@ -43,7 +46,20 @@ public class Compra {
 		this.paciente = paciente;
 	}
 	
+	public Set<CompraMedicamento> getMedicamentos() {
+		return medicamentos;
+	}
+
+
+	public void setMedicamentos(Set<CompraMedicamento> medicamentos) {
+		this.medicamentos = medicamentos;
+	}
+	
+
+	
 	public Compra() {}
+	
+	
 	
 	public int getId() {
 		return id;

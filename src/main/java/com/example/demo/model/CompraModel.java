@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,8 +16,8 @@ public class CompraModel {
 	private Date fecha;
 	private float precio;
 	private UserModel Paciente;
+	private List<MedicamentoModel> medicamentos;
 	public CompraModel() {
-		super();
 	}
 	public CompraModel(int id, Date fecha, float precio, UserModel idPaciente) {
 		super();
@@ -24,6 +25,14 @@ public class CompraModel {
 		this.fecha = fecha;
 		this.precio = precio;
 		this.Paciente = idPaciente;
+	}
+	
+
+	public List<MedicamentoModel> getMedicamentos() {
+		return medicamentos;
+	}
+	public void setMedicamentos(List<MedicamentoModel> medicamentos) {
+		this.medicamentos = medicamentos;
 	}
 	public int getId() {
 		return id;

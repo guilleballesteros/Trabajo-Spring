@@ -1,41 +1,47 @@
 package com.example.demo.model;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-
+import com.example.demo.entity.Compra;
+import com.example.demo.entity.Medicamento;
 
 public class CompraMedicamentoModel {
 	
-	@EmbeddedId
-	CompraMedicamentoKeyModel id;
-	private int idMedicamento;
-	private int idCompra;
-	public CompraMedicamentoModel() {
-		super();
-	}
-	public CompraMedicamentoModel(CompraMedicamentoKeyModel id ,int idMedicamento, int idCompra) {
-		this.id=id;
-		this.idMedicamento = idMedicamento;
-		this.idCompra = idCompra;
-	}
 	
-	public CompraMedicamentoKeyModel getId() {
-		return id;
-	}
-	public void setId(CompraMedicamentoKeyModel id) {
-		this.id = id;
-	}
-	public int getIdMedicamento() {
-		return idMedicamento;
-	}
-	public void setIdMedicamento(int idMedicamento) {
-		this.idMedicamento = idMedicamento;
-	}
-	public int getIdCompra() {
-		return idCompra;
-	}
-	public void setIdCompra(int idCompra) {
-		this.idCompra = idCompra;
-	}
+	private int id;
 	
+	
+    private MedicamentoModel medicamento;
+	
+	
+    private CompraModel compra;
+
+	public CompraMedicamentoModel(MedicamentoModel medicamento, CompraModel compra) {
+		this.medicamento = medicamento;
+		this.compra = compra;
+	}
+
+	public CompraMedicamentoModel() {}
+	
+	public MedicamentoModel getMedicamento() {
+		return medicamento;
+	}
+
+	public void setMedicamento(MedicamentoModel medicamento) {
+		this.medicamento = medicamento;
+	}
+
+	public CompraModel getCompra() {
+		return compra;
+	}
+
+	public void setCompra(CompraModel compra) {
+		this.compra = compra;
+	}
+
 }
