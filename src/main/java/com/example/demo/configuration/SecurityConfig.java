@@ -22,18 +22,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception{
 		http
 		.authorizeRequests()
-			.antMatchers("/","/photos/**","/auth/**","/webjars/**","/css/**","/citas/**","/medicos/**","/pacientes/**","/compras/**","/medicamentos/**","/files/**","/inicio/**").permitAll()
+			.antMatchers("/","/photos/**","/auth/**","/webjars/**","/css/**","/citas/**","/medicos/**","/users/**","/pacientes/**","/compras/**","/medicamentos/**","/files/**","/inicio/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 		.formLogin()
 			.loginPage("/auth/login")
-			.defaultSuccessUrl("/users/listPacientes/",true)
+			.defaultSuccessUrl("/",true)
 			.loginProcessingUrl("/auth/login-post")
 			.permitAll()
 			.and()
 		.logout()
 			.logoutUrl("/logout")
-			.logoutSuccessUrl("/auth/login?logout")
+			.logoutSuccessUrl("/")
 			.permitAll();
 		
 	}

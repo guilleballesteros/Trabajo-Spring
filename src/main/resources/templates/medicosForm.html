@@ -1,52 +1,80 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<head th:replace="layout :: head">
 </head>
-<body>
-	<form action="#" th:action="@{/medicos/add}" th:object="${medico}" method="post">
-		<h1 th:text="${medico.id != 0} ? 'Editar paciente' : 'Nuevo medico' ">
-		</h1>
-		<input type="hidden" th:field="*{id}" id="id">
-		<div class="form-group">
-			<label for="nombre">Name</label>
-			<input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Enter name"/>
-		</div>
-		<div class="form-group">
-			<label for="apellidos">Last name</label>
-			<input type="text" th:field="*{apellidos}" class="form-control" id="descripcion" placeholder="Enter last name"/>
-		</div>
-		<div class="form-group">
-			<label for="edad">Age</label>
-			<input type="number"step="any" th:field="*{edad}" class="form-control" id="edad" placeholder="Enter age"/>
-		</div>
-		<div class="form-group">
-			<label for="fechaalta">Discharge date</label>
-			<input type="date"step="any" th:field="*{fechaalta}" class="form-control" id="fechaalta" placeholder="Enter discharge date"/>
-		</div>
-		<div class="form-group">
-			<label for="especialidad">Specialty</label>
-			<input type="text"step="any" th:field="*{especialidad}" class="form-control" id="especialidad" placeholder="Enter specialty"/>
-		</div>
-		<div class="form-group">
-			<label for="username">Username</label>
-			<input type="text"step="any" th:field="*{username}" class="form-control" id="username" placeholder="Enter username"/>
-		</div>
-		<div class="form-group">
-			<label for="password">Password</label>
-			<input type="number"step="any" th:field="*{password}" class="form-control" id="password" placeholder="Enter password"/>
-		</div>
-		
-		
-		<a th:href="@{/medicos/list}">
-			<button type="button" class="btn btn-secondary"><i class="fas fa-arrow-circle-left"></i></button>
-		</a>
-		<input type="submit" class="btn btn-primary"/>
-		
-	</form>
-	
+<body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<div class="wrapper">
+	<header th:replace="layout :: header"></header>
+	<aside th:replace="layout :: aside"></aside>
+	<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1 th:if="${medico.id != 0}"><i class="far fa-edit"></i>
+         Edit Doctor
+      </h1>
+      <h1 th:if="${medico.id == 0}"><i class="fas fa-plus"></i>
+         Create Doctor
+      </h1>
+      
+    </section>
+	<section class="content" th:fragment="content">
+	     <div class="card card-default">
+	     	<div class="card-body">
+	     		<form action="#" th:action="@{/users/addMedico}" th:object="${medico}" method="post">
+					<input type="hidden" th:field="*{id}" id="id">
+					<input type="hidden" th:field="*{role}" id="role">
+					<input type="hidden" th:field="*{token}" id="token">
+					<input type="hidden" th:field="*{enabled}" id="enabled">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text"step="any" th:field="*{username}" class="form-control" id="username" placeholder="Enter username"/>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password"th:field="*{password}" class="form-control" id="password" placeholder="Enter password"/>
+					</div>
+					<div class="form-group">
+						<label for="nombre">Name</label>
+						<input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Enter name"/>
+					</div>
+					<div class="form-group">
+						<label for="apellidos">Last name</label>
+						<input type="text" th:field="*{apellidos}" class="form-control" id="descripcion" placeholder="Enter last name"/>
+					</div>
+					<div class="form-group">
+						<label for="edad">Age</label>
+						<input type="number"step="any" th:field="*{edad}" class="form-control" id="edad" placeholder="Enter age"/>
+					</div>
+					<div class="form-group">
+						<label for="fechaalta">Discharge date</label>
+						<input type="date" th:field="*{fechaalta}" class="form-control" id="fechaalta" placeholder="Enter discharge date"/>
+					</div>
+					<div class="form-group">
+						<label for="especialidad">Specialty</label>
+						<select name="especialidad" th:field="*{especialidad}" id="especialidad">
+							<option value="Medico de familia">Médico de familia</option>
+							<option value="Digestivo">Digestivo</option>
+							<option value="Neurologo">Neurólogo</option>
+							<option value="Dermatologo">Dermatólogo</option>
+							<option value="Traumatologo">Traumatólogo</option>
+						</select>
+					</div>
+					<a th:href="@{/users/listMedicos}">
+						<button type="button" class="btn btn-secondary"><i class="fas fa-arrow-circle-left"></i></button>
+					</a>
+					<input type="submit" class="btn btn-primary"/>
+				</form>
+	     	</div>
+	     </div>
+	</section>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer th:replace="layout :: footer"></footer>
+  <aside th:replace="layout :: aside2"></aside>
+  <div class="control-sidebar-bg"></div>
+</div>
+	<th:block th:replace="layout :: assets"></th:block>
 </body>
 </html>

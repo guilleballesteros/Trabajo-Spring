@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.UserRepository;
+import com.example.demo.controller.UserController;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
 
@@ -31,6 +34,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	private static final Log Logger=LogFactory.getLog(UserServiceImpl.class);
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -65,7 +70,10 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 
 	@Override
 	public UserModel findModel(int id) {
-		return transform(userRepository.findById(id).orElse(null));
+		com.example.demo.entity.User usuario=userRepository.findById(id).orElse(null);
+		Logger.info(usuario.getFechaalta());
+		Logger.info(transform(usuario).getFechaalta());
+		return transform(usuario);
 	}
 
 
@@ -77,7 +85,9 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 
 	@Override
 	public UserModel transform(com.example.demo.entity.User user) {
-		return dozer.map(user, UserModel.class);
+		UserModel usuario= dozer.map(user, UserModel.class);
+		usuario.setFechaalta(user.getFechaalta());
+		return usuario;
 	}
 
 	@Override
@@ -99,13 +109,18 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Override
 	public List<UserModel> listAllpacientes() {
 		return userRepository.findByRole("ROLE_PACIENTE").
-				stream().map(c-> dozer.map(c, UserModel.class)).collect(Collectors.toList());
+				stream().map(c-> transform(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<UserModel> listAllmedicos() {
 		return userRepository.findByRole("ROLE_MEDICO").
-				stream().map(c-> dozer.map(c, UserModel.class)).collect(Collectors.toList());
+				stream().map(c-> transform(c)).collect(Collectors.toList());
+	}
+	
+	public UserModel findByUsername(String username) {
+		return transform(userRepository.findByUsername(username));
+		
 	}
 	
 	

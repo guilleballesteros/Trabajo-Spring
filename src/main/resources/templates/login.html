@@ -1,61 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}"/>
-<link rel="stylesheet" th:href="@{/webjars/jquery/3.5.1/jquery.min.js}"/>
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<head th:replace="layout :: head">
 </head>
-<body>
-	<div class="login-box">
-      <div class="login-logo">
-        <p class="text-center">Login</p>
-      </div>
-      <div class="card">
-        <div class="card-body login-card-body">
-          <form action="#" th:action="@{/auth/login-post}" th:object="${user}" method="post">
-
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input
-                type="text"
-                name="username"
-                autofocus
-                required
-                id="id_username"
-                placeholder="Enter your username"
-                class="form-control"
-              />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                required
-                id="id_password"
-                placeholder="Enter your password"
-                class="form-control"
-              />
-            </div>
-            <div th:if="${error!=null}" class=" alert alert-danger" role="alert">Datos no v√°lidos</div>
-			<div th:if="${logout!=null}" class=" alert alert-info" role="alert">Has cerrado sesi√≥n</div>
-            <input
-              type="submit"
-              class="btn btn-primary btn-block"
-              value="Log in"
-            />
-          </form>
-          
-
-          <p class="mb-0">
-            <a href="#" th:href="@{/auth/registerForm}" class="text-center">Register a new membership</a>
-          </p>
-        </div>
-      </div>
-    </div>
+<body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<div class="wrapper">
+	<header th:replace="layout :: header"></header>
+	<aside th:replace="layout :: aside"></aside>
+	<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1><i class="far fa-user"></i>
+         Login
+      </h1>
+      
+    </section>
+	<section class="content" th:fragment="content">
+	     <div class="card card-default">
+	     	<div class="card-body">
+	     		<form action="#" th:action="@{/auth/login-post}" th:object="${user}" method="post">
+		            <div class="form-group">
+		              <label for="username">Username</label>
+		              <input
+		                type="text"
+		                name="username"
+		                autofocus
+		                required
+		                id="id_username"
+		                placeholder="Enter your username"
+		                class="form-control"
+		              />
+		            </div>
+		            <div class="form-group">
+		              <label for="password">Password</label>
+		              <input
+		                type="password"
+		                name="password"
+		                required
+		                id="id_password"
+		                placeholder="Enter your password"
+		                class="form-control"
+		              />
+		            </div>
+		            <div th:if="${error!=null}" class=" alert alert-danger" role="alert">Datos no v·lidos</div>
+					<div th:if="${logout!=null}" class=" alert alert-info" role="alert">Has cerrado sesiÛn</div>
+		            <input
+		              type="submit"
+		              class="btn btn-primary btn-block"
+		              value="Log in"
+		            />
+		          </form>
+				<p class="mb-0">
+		            <a href="#" th:href="@{/auth/registerForm}" class="text-center">Register a new membership</a>
+		        </p>
+	     	</div>
+	     </div>
+	</section>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer th:replace="layout :: footer"></footer>
+  <aside th:replace="layout :: aside2"></aside>
+  <div class="control-sidebar-bg"></div>
+</div>
+	<th:block th:replace="layout :: assets"></th:block>
 </body>
 </html>

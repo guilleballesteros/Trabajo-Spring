@@ -7,39 +7,73 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
-	<table class="table table-striped table-bordered">
-		<thead class="thead-light">
-			<tr>
-				<th>IdPaciente</th>
-				<th>IdMedico</th>
-				<th>Fecha</th>
-				<th>Observaciones</th>
-			</tr>
-		</thead>
-		<tbody th:each="cita: ${citas}">
-			<th th:text="${cita.idPaciente}"></th>
-			<th th:text="${cita.idMedico}"></th>
-			<th th:text="${cita.fecha}"></th>	
-			<th th:text="${cita.observaciones}"></th>	
-			<th>
-				<a th:href="@{/citas/form/}+${cita.id}">
-                  <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-               	</a>
-				<a th:href="@{/medicamentos/delete/}+${medicamento.id}">
-					<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
+	
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head th:replace="layout :: head">
+</head>
+<body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<div class="wrapper">
+	<header th:replace="layout :: header"></header>
+	<aside th:replace="layout :: aside"></aside>
+	<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1><i class="fas fa-search"></i>
+         List of Appointments
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Layout</a></li>
+        <li class="active">Collapsed Sidebar</li>
+      </ol>
+    </section>
+	<section class="content" th:fragment="content">
+	     <div class="card card-default">
+	     	<div class="card-body">
+	     		<table class="table table-striped table-bordered" id="data">
+					<thead class="thead-light">
+						<tr>
+							<th>IdPaciente</th>
+							<th>IdMedico</th>
+							<th>Fecha</th>
+							<th>Observaciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="cita: ${citas}">
+							<th th:text="${cita.paciente.id}"></th>
+							<th th:text="${cita.medico.id}"></th>
+							<th th:text="${cita.fecha}"></th>	
+							<th th:text="${cita.observaciones}"></th>	
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>IdPaciente</th>
+							<th>IdMedico</th>
+							<th>Fecha</th>
+							<th>Observaciones</th>
+						</tr>
+					</tfoot>
+				</table>
+				<a th:href="@{/citas/form}">
+					<button type="button" class="btn btn-primary">New cita</button>
 				</a>
-			
-			</th>	
-		</tbody>
-		<tfoot>
-			<th>IdPaciente</th>
-			<th>IdMedico</th>
-			<th>Fecha</th>
-			<th>Observaciones</th>
-		</tfoot>
-	</table>
-	<a th:href="@{/citas/form}">
-		<button type="button" class="btn btn-primary">New cita</button>
-	</a>
+	     	</div>
+	     </div>
+	</section>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer th:replace="layout :: footer"></footer>
+  <aside th:replace="layout :: aside2"></aside>
+  <div class="control-sidebar-bg"></div>
+</div>
+	<th:block th:replace="layout :: assets"></th:block>
 </body>
 </html>

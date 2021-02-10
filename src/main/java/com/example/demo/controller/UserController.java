@@ -2,8 +2,11 @@ package com.example.demo.controller;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,9 +35,14 @@ public class UserController {
 	private static final String FORM_PACIENTE="pacientesForm";
 	private static final String FORM_MEDICO="medicosForm";
 	
+	private static final Log Logger=LogFactory.getLog(UserController.class);
+	
 	@Autowired
 	@Qualifier("userService")
 	private UserServiceImpl userServ;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private FileSystemStorageService storageService;
@@ -48,13 +56,13 @@ public class UserController {
 	
 	@GetMapping("/listMedicos")
 	public ModelAndView listMedicos() {
-		ModelAndView mav=new ModelAndView(PACIENTES_VIEW);
-		mav.addObject("pacientes", userServ.listAllmedicos());
+		ModelAndView mav=new ModelAndView(MEDICOS_VIEW);
+		mav.addObject("medicos", userServ.listAllmedicos());
 		return mav;
 	}
 	
 	@PostMapping("/addPaciente")
-	public String addPaciente(@Valid @ModelAttribute("user") UserModel userModel, BindingResult bindingResult,
+	public String addPaciente(@Valid @ModelAttribute("paciente") UserModel userModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model, @RequestParam("file") MultipartFile file) {
 		if(bindingResult.hasErrors()) {
 			return FORM_PACIENTE;
@@ -81,6 +89,13 @@ public class UserController {
 					UserModel paciente = userServ.findModel(userModel.getId());
 					userModel.setFoto(paciente.getFoto());
 				}
+				if(userModel.getPassword().isEmpty()) {
+					UserModel paciente = userServ.findModel(userModel.getId());
+					userModel.setPassword(paciente.getPassword());
+				}
+				else {
+					userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+				}
 				userServ.updateUser(userModel);
 				flash.addFlashAttribute("success","Paciente Actualizado exitosamente");
 			}
@@ -90,19 +105,30 @@ public class UserController {
 	}
 	
 	@PostMapping("/addMedico")
-	public String addMedicamentos(@Valid @ModelAttribute("medicos") UserModel userModel, BindingResult bindingResult,
+	public String addMedico(@Valid @ModelAttribute("medico") UserModel userModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model) {
 		if(bindingResult.hasErrors()) {
+			flash.addFlashAttribute("success",userModel.getFechaalta());
 			return FORM_MEDICO;
 		}
 		else {
 			if(userModel.getId()==0 ) {
+				userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+				userModel.setRole("ROLE_MEDICO");
+				userModel.setEnabled(true);
 				userServ.addUser(userModel);
 				flash.addFlashAttribute("success","Medico insertado exitosamente");
 			}
 			else {
+				if(userModel.getPassword().isEmpty()) {
+					UserModel medico = userServ.findModel(userModel.getId());
+					userModel.setPassword(medico.getPassword());
+				}
+				else {
+					userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+				}
 				userServ.updateUser(userModel);
-				flash.addFlashAttribute("success","Medicos Actualizado exitosamente");
+				flash.addFlashAttribute("success","Medico Actualizado exitosamente");
 			}
 			return "redirect:/users/listMedicos";
 		}
@@ -115,7 +141,9 @@ public class UserController {
 			model.addAttribute("medico", new UserModel());
 		}
 		else {
-			model.addAttribute("medico", userServ.findModel(id));
+			UserModel medico= userServ.findModel(id);
+			model.addAttribute("medico",medico);
+			
 		}
 		return FORM_MEDICO;
 	}
@@ -130,7 +158,6 @@ public class UserController {
 		}
 		return FORM_PACIENTE;
 	}
-	
 	
 	@GetMapping("/deletePaciente/{id}")
 	public String deletePaciente(@PathVariable("id") int id, RedirectAttributes flash) {
@@ -151,7 +178,7 @@ public class UserController {
 		else {
 			flash.addAttribute("success", "No se ha podido eliminar el medico");
 		}
-		return "redirect:/medicos/list";
+		return "redirect:/users/listMedicos";
 	}
 
 }

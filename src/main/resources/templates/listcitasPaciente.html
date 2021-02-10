@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+	<table class="table table-striped table-bordered">
+		<thead class="thead-light">
+			<tr>
+				<th>IdMedico</th>
+				<th>Fecha</th>
+				<th>Observaciones</th>
+			</tr>
+		</thead>
+		<tbody th:each="cita: ${citas}" th:if="cita.observacion!=null">
+			<th th:text="${cita.medico.id}"></th>
+			<th th:text="${cita.fecha}"></th>	
+			<th th:text="${cita.observaciones}"></th>
+		</tbody>
+		<tfoot>
+			<th>IdMedico</th>
+			<th>Fecha</th>
+			<th>Observaciones</th>
+		</tfoot>
+	</table>
+	<a th:href="@{/citas/form}">
+		<button type="button" class="btn btn-primary">New cita</button>
+	</a>
+</body>
+</html>

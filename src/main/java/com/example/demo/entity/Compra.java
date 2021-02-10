@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Compra {
@@ -24,6 +26,9 @@ public class Compra {
 	@ManyToOne
 	@JoinColumn(name="idPaciente")
 	private User paciente;
+	
+	@OneToMany(mappedBy="compra")
+	private List<CompraMedicamento> medicamentos;
 
 	public Compra(int id, Date fecha, float precio, User paciente) {
 		this.id = id;

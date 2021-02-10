@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head th:replace="layout :: head">
@@ -10,22 +11,30 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="far fa-user"></i>
-         Register
+      <h1><i class="far fa-edit"></i>
+         Edit Profile
       </h1>
       
     </section>
 	<section class="content" th:fragment="content">
 	     <div class="card card-default">
 	     	<div class="card-body">
-	     		<form action="#" th:action="@{/auth/register}" th:object="${user}" method="post" enctype="multipart/form-data">
+	     		<form action="#" th:action="@{/users/addPaciente}" th:object="${paciente}" method="post" enctype="multipart/form-data">
+		     		<input type="hidden" th:field="*{id}" id="id">
+					<input type="hidden" th:field="*{role}" id="role">
+					<input type="hidden" th:field="*{token}" id="token">
+					<input type="hidden" th:field="*{enabled}" id="enabled">
 					<div class="form-group">
 						<label for="username">Username</label>
 						<input type="text" th:field="*{username}" class="form-control" id="username" name="username" placeholder="Username"/>
 					</div>
 					<div class="form-group">
-						<label for="password">Password</label>
+						<label for="password">Currently password</label>
 						<input type="password" th:field="*{password}" class="form-control" id="password" name="password" placeholder="Password"/>
+					</div>
+					<div class="form-group">
+						<label for="passwordN">New password</label>
+						<input type="password" class="form-control" id="passwordN" name="passwordN" placeholder="Password"/>
 					</div>
 					<div class="form-group">
 						<label for="nombre">Name</label>
@@ -47,8 +56,12 @@
 						<label for="file">Foto</label>
 						<input if="filebutton" name="file" class="form-control input-file" type="file">
 					</div>
+					<a th:href="@{/users/listPacientes}">
+						<button type="button" class="btn btn-secondary"><i class="fas fa-arrow-circle-left"></i></button>
+					</a>
+					<input type="submit" class="btn btn-primary"/>
+				</form>
 					
-					<input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit" value="Sign up"/>
 	     	</div>
 	     </div>
 	</section>

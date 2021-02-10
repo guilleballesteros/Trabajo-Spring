@@ -38,7 +38,7 @@ public class LoginController {
 	}
 	@GetMapping("/login-post")
 	public String loginPost() {
-		return "redirect:/users/listPacientes/";
+		return "redirect:/";
 	}
 	
 	@GetMapping("/auth/registerForm")

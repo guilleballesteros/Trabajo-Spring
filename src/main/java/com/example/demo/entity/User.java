@@ -9,7 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class User {
@@ -36,6 +40,28 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="medico")
 	private List<Citas> citasMedico;
 	
+	
+	private String direccion;
+	
+	private String foto;
+	
+	private String apellidos;
+	
+	private int edad;
+	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date fechaalta;
+	
+	private String especialidad;
+	
+	private boolean enabled;
+	
+	private String role;
+	
+	private String token;
+
+	
 	public User(int id, String username, @Size(max = 100) String password, String nombre, List<Compra> compras,
 			List<Citas> citasPaciente, List<Citas> citasMedico, String direccion, String foto, String apellidos,
 			int edad, Date fechaalta, String especialidad, boolean enabled, String role, String token) {
@@ -57,29 +83,6 @@ public class User {
 		this.role = role;
 		this.token = token;
 	}
-
-	
-	
-	private String direccion;
-	
-	private String foto;
-	
-	private String apellidos;
-	
-	private int edad;
-	
-	private Date fechaalta;
-	
-	private String especialidad;
-	
-	private boolean enabled;
-	
-	private String role;
-	
-	private String token;
-
-	
-	
 
 	
 

@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Citas {
@@ -23,7 +27,12 @@ public class Citas {
 	@JoinColumn(name="idMedico")
 	private User medico;
 	@Column(length=100)
+	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha;
+	
+	
 	private String observaciones;
 	
 	public Citas(int id, User paciente, User medico, Date fecha, String observaciones) {
@@ -33,6 +42,7 @@ public class Citas {
 		this.fecha = fecha;
 		this.observaciones = observaciones;
 	}
+	public Citas() {}
 	public int getId() {
 		return id;
 	}

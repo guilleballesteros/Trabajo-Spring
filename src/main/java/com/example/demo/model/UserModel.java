@@ -2,10 +2,14 @@ package com.example.demo.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 public class UserModel {
+
 
 	private int id;
 	
@@ -23,6 +27,8 @@ public class UserModel {
 	
 	private int edad;
 	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaalta;
 	
 	private String especialidad;
@@ -158,7 +164,14 @@ public class UserModel {
 	public void setToken(String token) {
 		this.token = token;
 	}
-
 	
+	
+	@Override
+	public String toString() {
+		return "UserModel [id=" + id + ", username=" + username + ", password=" + password + ", nombre=" + nombre
+				+ ", direccion=" + direccion + ", foto=" + foto + ", apellidos=" + apellidos + ", edad=" + edad
+				+ ", fechaalta=" + fechaalta + ", especialidad=" + especialidad + ", enabled=" + enabled + ", role="
+				+ role + ", token=" + token + "]";
+	}
 	
 }

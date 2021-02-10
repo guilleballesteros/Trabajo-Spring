@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 @Entity
 public class Medicamento {
 	@Id
@@ -22,16 +23,11 @@ public class Medicamento {
 	private float precio;
 	private int stock;
 	
-	@ManyToMany
-	@JoinTable(
-		name="compra_medicamentos",
-		joinColumns=@JoinColumn(name="idMedicamento"),
-		inverseJoinColumns = @JoinColumn(name="idCompra")
-			)
-	private List<Compra> compras;
+	@OneToMany(mappedBy="medicamento")
+	private List<CompraMedicamento> compras;
 
 	public Medicamento(int id, String nombre, String descripcion, String receta, float precio, int stock,
-			List<Compra> compras) {
+			List<CompraMedicamento> compras) {
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -78,11 +74,11 @@ public class Medicamento {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	public List<Compra> getCompras() {
+	public List<CompraMedicamento> getCompras() {
 		return compras;
 	}
-	public void setCompras(List<Compra> compras) {
-		this.compras = compras;
+	public void setCompras(List<CompraMedicamento> comprasM) {
+		this.compras = comprasM;
 	}
 	
 	
