@@ -13,5 +13,5 @@ public interface CompraService {
 	Compra transform(CompraModel compraModel);
 	CompraModel transform(Compra compra);
 	Compra updateCompra(CompraModel compraModel);
-
+//prueba
 }
