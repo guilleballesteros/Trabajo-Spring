@@ -20,7 +20,7 @@ public class ComprasMedicamentosServiceImpl implements ComprasMedicamentosServic
 	@Autowired
 	@Qualifier("CompraMedicamento")
 	private CompraMedicamentoRepositorio compramedicamentoRep;
-	
+	//prueba
 	@Autowired
 	private DozerBeanMapper dozer;
 	

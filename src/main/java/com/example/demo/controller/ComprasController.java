@@ -52,7 +52,8 @@ public class ComprasController {
 	@Autowired
 	@Qualifier("userService")
 	private UserServiceImpl userServ;
-	//hola
+	
+	
 	@Autowired
 	@Qualifier("MedicamentosService")
 	private MedicamentosService medicamentosServ;
