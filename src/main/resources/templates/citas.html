@@ -34,7 +34,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="cita: ${citas}" th:if="${cita.observaciones == null}">
+						<tr th:each="cita: ${citas}">
 							<th th:text="${cita.paciente.id}"></th>
 							<th th:text="${cita.medico.id}"></th>
 							<th th:text="${cita.fecha}"></th>	

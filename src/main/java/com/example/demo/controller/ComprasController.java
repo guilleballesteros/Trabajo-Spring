@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -67,13 +68,14 @@ public class ComprasController {
 	@Qualifier("CompraService")
 	private CompraService comprasServ;
 	
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/list")
 	public ModelAndView listMedicamentos() {
 		ModelAndView mav=new ModelAndView(COMPRAS_VIEW);
 		mav.addObject("compras", comprasServ.listAllCompras());
 		return mav;
 	}
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/add")
 	public String addCompras(@Valid @ModelAttribute("compra") CompraModel compraModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model) {
@@ -93,7 +95,7 @@ public class ComprasController {
 		}
 		
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping(value={"/form","/form/{id}"})
 	public String formCompra(@PathVariable(name="id", required=false) Integer id, Model model) {
 		if(id==null) {
@@ -104,7 +106,7 @@ public class ComprasController {
 		}
 		return FORM_VIEW;
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/delete/{id}")
 	public String deleteCompra(@PathVariable("id") int id, RedirectAttributes flash) {
 		if(comprasServ.removeCompra(id)==0) {
@@ -121,7 +123,7 @@ public class ComprasController {
 		ModelAndView mav=new ModelAndView(CARRITO);
 		return mav;
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@SuppressWarnings("null")
 	@PostMapping("/addCarrito/{id}")
 	public String addCarrito(@PathVariable("id") int id, @RequestParam("cantidad") int cantidad,RedirectAttributes flash) {
@@ -162,9 +164,8 @@ public class ComprasController {
 		return "redirect:/medicamentos/list";
 		
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@PostMapping("/removeCarrito/{id}")
-	
 	public String removeCarrito(@PathVariable("id") int id, @RequestParam("cantidad") int cantidad,RedirectAttributes flash) {
 		float precioF=0;
 		MedicamentoModel medicamento=medicamentosServ.findModel(id);
@@ -210,7 +211,7 @@ public class ComprasController {
 		}
 		return "redirect:/compras/carrito";
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/comprar")
 	public String comprar(RedirectAttributes flash) {
 		@SuppressWarnings("unchecked")
@@ -227,9 +228,9 @@ public class ComprasController {
 			for(CarritoModel a:carrito) {
 				CompraMedicamentoModel relacion=new CompraMedicamentoModel(a.getMedicamento(), compra);
 				relacionServ.addCompraMedicamento(relacion);
-				
-				
-				
+				a.getMedicamento().setStock(a.getMedicamento().getStock()-a.getNum());
+				medicamentosServ.updateMedicamento(a.getMedicamento());
+
 			}
 			
 			session.removeAttribute("carrito");

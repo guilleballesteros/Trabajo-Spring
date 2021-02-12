@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,14 +53,15 @@ public class PacientesController {
 	
 	private static final String FORM_PACIENTE="pacientesUpdate";
 	private static final String CITAS_LIST="listCitasPaciente";
-	
+	private static final String HISTORIAL="citas";
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping(value={"/form"})
 	public String formPaciente(Model model) {
 		UserDetails userDetails= (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("paciente", userServ.findByUsername(userDetails.getUsername()));
 		return FORM_PACIENTE;
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@PostMapping("/update")
 	public String addPaciente(@Valid @ModelAttribute("paciente") UserModel userModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model, @RequestParam("file") MultipartFile file, @RequestParam("passwordN") String passwordN) {
@@ -100,6 +103,7 @@ public class PacientesController {
 		
 		
 	}
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/listCitas")
 	public ModelAndView listCitas() {
 		UserDetails userDetails= (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -107,6 +111,15 @@ public class PacientesController {
 		ModelAndView mav=new ModelAndView(CITAS_LIST);
 		mav.addObject("citas", citasServ.findByPaciente(userServ.transform(paciente)));
 		return mav;
+	}
+	
+	@GetMapping("/historialPaciente/{id}")
+	public ModelAndView historial(@PathVariable(name="id") Integer id) {
+		UserModel paciente=userServ.findModel(id);
+		ModelAndView mav=new ModelAndView(CITAS_LIST);
+		mav.addObject("citas", citasServ.findByPaciente(userServ.transform(paciente)));
+		return mav;
+		
 	}
 
 }

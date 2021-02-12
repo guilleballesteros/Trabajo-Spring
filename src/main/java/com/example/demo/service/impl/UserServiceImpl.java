@@ -1,13 +1,19 @@
 package com.example.demo.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
@@ -18,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.UserRepository;
-import com.example.demo.controller.UserController;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
 
@@ -28,6 +33,9 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	@Autowired
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	@Autowired
 	private DozerBeanMapper dozer;
@@ -103,7 +111,10 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 
 	@Override
 	public com.example.demo.entity.User updateUser(UserModel userModel) {
-		return userRepository.save(transform(userModel));
+		Logger.info("Code: "+userModel.getVerificationCode());
+		com.example.demo.entity.User usuario=userRepository.save(transform(userModel));
+		Logger.info("Code: "+usuario.getVerificationCode());
+		return usuario;
 	}
 
 	@Override
@@ -122,6 +133,40 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 		return transform(userRepository.findByUsername(username));
 		
 	}
+	public UserModel findByCode(String code) {
+		return transform(userRepository.findByVerificationCode(code));
+	}
+	
+	@Override
+	public void sendVerificationEmail(com.example.demo.entity.User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+	    String toAddress = user.getUsername();
+	    String fromAddress = "trabajospring@gmail.com";
+	    String senderName = "SegPrivada";
+	    String subject = "Please verify your registration";
+	    String content = "Dear [[name]],<br>"
+	            + "Please click the link below to verify your registration:<br>"
+	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+	            + "Thank you,<br>"
+	            + "Your company name.";
+	     
+	    MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	     
+	    helper.setFrom(fromAddress, senderName);
+	    helper.setTo(toAddress);
+	    helper.setSubject(subject);
+	     
+	    content = content.replace("[[name]]", user.getNombre());
+	    String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+	     
+	    content = content.replace("[[URL]]", verifyURL);
+	     
+	    helper.setText(content, true);
+	     
+	    mailSender.send(message);
+	     
+	}
+
 	
 	
 	

@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,8 +67,16 @@ public class UserController {
 	@PostMapping("/addPaciente")
 	public String addPaciente(@Valid @ModelAttribute("paciente") UserModel userModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model, @RequestParam("file") MultipartFile file) {
-		if(bindingResult.hasErrors()) {
-			return FORM_PACIENTE;
+		//Comprueba que no haya valores nulos
+		if(userModel.getNombre().isEmpty()||userModel.getApellidos().isEmpty()||userModel.getDireccion().isEmpty()||
+				userModel.getUsername().isEmpty()||userModel.getEdad()==0|| userModel.getPassword().isEmpty()) {
+			flash.addFlashAttribute("error","there can't be null values");
+			return "redirect:/users/listPacientes";
+		}
+		//coprueba si el usuario ya existe
+		else if(userServ.findByUsername(userModel.getUsername())!=null) {
+			flash.addFlashAttribute("error","This user already exist");
+			return "redirect:/users/formPaciente";
 		}
 		else {
 			if(userModel.getId()==0 ) {
@@ -107,28 +118,46 @@ public class UserController {
 	@PostMapping("/addMedico")
 	public String addMedico(@Valid @ModelAttribute("medico") UserModel userModel, BindingResult bindingResult,
 			RedirectAttributes flash,Model model) {
-		if(bindingResult.hasErrors()) {
-			flash.addFlashAttribute("success",userModel.getFechaalta());
-			return FORM_MEDICO;
+		//comprueba que no haya valores nulos
+		if(userModel.getUsername().isEmpty()||userModel.getPassword().isEmpty()||userModel.getNombre().isEmpty()||
+				userModel.getApellidos().isEmpty()||userModel.getFechaalta()==null||
+				userModel.getEspecialidad().isEmpty()||userModel.getEdad()==0) {
+			flash.addFlashAttribute("error","There can't be null values");
+			return "redirect:/users/formMedico";
+		}
+		//comprueba que no exista ya un usuario con ese nombre de usuario
+		else if(userServ.findByUsername(userModel.getUsername())!=null) {
+			flash.addFlashAttribute("error","This user already exist");
+			return "redirect:/users/formMedico";
 		}
 		else {
-			if(userModel.getId()==0 ) {
-				userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
-				userModel.setRole("ROLE_MEDICO");
-				userModel.setEnabled(true);
-				userServ.addUser(userModel);
-				flash.addFlashAttribute("success","Medico insertado exitosamente");
+			Date fechaActual=new Date();
+			Date fechaalta=userModel.getFechaalta();
+			//comprueba que la fecha introducida no sea mayor al dia actual
+			if(fechaActual.before(fechaalta)) {
+				flash.addFlashAttribute("error","Incorrect Date");
+				return "redirect:/users/formMedico";
 			}
 			else {
-				if(userModel.getPassword().isEmpty()) {
-					UserModel medico = userServ.findModel(userModel.getId());
-					userModel.setPassword(medico.getPassword());
+				
+				if(userModel.getId()==0 ) {
+					userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+					userModel.setRole("ROLE_MEDICO");
+					userModel.setEnabled(true);
+					userServ.addUser(userModel);
+					flash.addFlashAttribute("success","Medico insertado exitosamente");
 				}
 				else {
-					userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+					if(userModel.getPassword().isEmpty()) {
+						UserModel medico = userServ.findModel(userModel.getId());
+						userModel.setPassword(medico.getPassword());
+					}
+					else {
+						userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+					}
+					userServ.updateUser(userModel);
+					flash.addFlashAttribute("success","Medico Actualizado exitosamente");
 				}
-				userServ.updateUser(userModel);
-				flash.addFlashAttribute("success","Medico Actualizado exitosamente");
 			}
 			return "redirect:/users/listMedicos";
 		}

@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,12 +22,16 @@ import com.example.demo.model.UserModel;
 import com.example.demo.service.impl.UserServiceImpl;
 import com.example.demo.upload.FileSystemStorageService;
 
+import ch.qos.logback.classic.Logger;
+import net.bytebuddy.utility.RandomString;
+
 @Controller
 public class LoginController {
 	
 	@Autowired
 	@Qualifier("userService")
 	private UserServiceImpl userservice;
+	
 	
 	@Autowired
 	private FileSystemStorageService storageService;
@@ -48,7 +56,7 @@ public class LoginController {
 	}
 	
 	@PostMapping("/auth/register")
-	public String Register(@ModelAttribute User user, RedirectAttributes flash, BindingResult bindingResult, @RequestParam("file") MultipartFile file) {
+	public String Register(@ModelAttribute User user, RedirectAttributes flash, BindingResult bindingResult, @RequestParam("file") MultipartFile file) throws UnsupportedEncodingException, MessagingException {
 		if(bindingResult.hasErrors()) {
 			return "redirect:/auth/registerForm";
 		}
@@ -57,11 +65,26 @@ public class LoginController {
 			if(!file.isEmpty()) {
 				String imagen = storageService.store(file, user.getId()); 
 				user.setFoto(MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serverFile", imagen).build().toString());
-				userservice.updateUser(userservice.transform(user));
+				
 			}
+			String randomCode = RandomString.make(64);
+		    user.setVerificationCode(randomCode);
+			userservice.updateUser(userservice.transform(user));
 			flash.addFlashAttribute("success","Te has registrado exitosamente");
 			return "redirect:/auth/login";
 		}
 	}
+	@GetMapping("verify")
+	public String verificar(@RequestParam("code") String code) {
+		UserModel user =userservice.findByCode(code);
+		if(user!=null) {
+			user.setEnabled(true);
+			userservice.updateUser(user);
+		}
+		
+		return "redirect:/auth/login";
+	}
+	
+	
 
 }

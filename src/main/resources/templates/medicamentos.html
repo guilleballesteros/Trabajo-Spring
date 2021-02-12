@@ -48,13 +48,14 @@
 							<th th:text="${medicamento.stock}"></th>	
 							<th>
 								<a sec:authorize="hasRole('ROLE_MEDICO')" th:href="@{/medicamentos/form/}+${medicamento.id}">
-				                  <button type="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+				                  <button type="button" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>
 				               	</a>
-								<a sec:authorize="hasRole('ROLE_MEDICO')" th:href="@{/medicamentos/delete/}+${medicamento.id}">
-									<button type="button" class="btn btn-default"><i class="fas fa-trash"></i></button>
+								<a sec:authorize="hasRole('ROLE_MEDICO')" data-toggle="modal" th:onclick="|confirmDelete('@{/medicamentos/delete/}+${medicamento.id}')|">
+									<button type="button" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>
 								</a>
 								
-								<form th:action="@{/compras/addCarrito/}+${medicamento.id}"  method="post">
+								
+								<form sec:authorize="hasRole('ROLE_PACIENTE')" th:action="@{/compras/addCarrito/}+${medicamento.id}"  method="post">
 									<input type="number" step="any" name="cantidad" value="1"/>
 									<input type="submit" value="Buy">
 								</form>
@@ -79,6 +80,7 @@
 	     	</div>
 	     </div>
 	</section>
+	<div th:replace="layout :: modal"></div>
   </div>
   <!-- /.content-wrapper -->
   <footer th:replace="layout :: footer"></footer>

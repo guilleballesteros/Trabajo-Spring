@@ -50,8 +50,11 @@
 								<a class="btn btn-info btn-xs" th:href="@{/users/formPaciente/}+${paciente.id}">
 									<i class="fa fa-edit"></i>
 				               	</a>
-								<a class="btn btn-danger btn-xs" th:href="@{/users/deletePaciente/}+${paciente.id}">
+								<a class="btn btn-danger btn-xs" data-toggle="modal" th:onclick="|confirmDelete('@{/users/deletePaciente/}+${paciente.id}')|">
 									<i class="fas fa-trash"></i>
+								</a>
+								<a sec:authorize="hasRole('ROLE_MEDICO')" class="btn btn-warning btn-xs" th:href="@{/pacientes/historialPaciente/}+${paciente.id}">
+									<i class="fas fa-laptop-medical"></i>
 								</a>
 							
 							</th>	
@@ -75,6 +78,7 @@
 	     	</div>
 	     </div>
 	</section>
+	<div th:replace="layout :: modal"></div>
   </div>
   <!-- /.content-wrapper -->
   <footer th:replace="layout :: footer"></footer>
@@ -84,3 +88,4 @@
 	<th:block th:replace="layout :: assets"></th:block>
 </body>
 </html>
+

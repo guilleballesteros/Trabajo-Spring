@@ -10,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class UserModel {
 
-
 	private int id;
 	
 	private String username;
@@ -24,6 +23,8 @@ public class UserModel {
 	private String foto;
 	
 	private String apellidos;
+	
+	private String verificationCode;
 	
 	private int edad;
 	
@@ -42,7 +43,7 @@ public class UserModel {
 	
 	public UserModel(int id, String username, String password, String nombre, String direccion, String foto,
 			String apellidos, int edad, Date fechaalta, String especialidad, boolean enabled, String role,
-			String token) {
+			String token, String verification) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -57,9 +58,25 @@ public class UserModel {
 		this.enabled = enabled;
 		this.role = role;
 		this.token = token;
+		this.verificationCode=verification;
 	}
 	
+	
+	
 	public UserModel() {}
+	
+	
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
 
 	public int getId() {
 		return id;

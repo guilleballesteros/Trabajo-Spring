@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -42,39 +44,50 @@ public class CitasController {
 	@Autowired
 	@Qualifier("userService")
 	private UserServiceImpl userServ;
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@GetMapping("/form")
 	public String formMedico( Model model) {
 		model.addAttribute("cita",new CitasModel());
 		model.addAttribute("Medicos",userServ.listAllmedicos());
 		return FORM_VIEW;
 	}
-	
+	@PreAuthorize("hasRole('ROLE_PACIENTE')")
 	@PostMapping("/add")
 	public String addCita(@Valid @ModelAttribute("cita") CitasModel citaModel, BindingResult bindingResult,
-			RedirectAttributes flash,Model mode, @RequestParam("idMedico") int idMedico) throws ParseException {
+			RedirectAttributes flash,Model model, @RequestParam("idMedico") int idMedico) throws ParseException {
 		if(bindingResult.hasErrors()) {
 			flash.addFlashAttribute("error","los datos insertados no son correctos");
 			return FORM_VIEW;
 		}
 		else {
-			if(citaModel.getId()==0) {
-				Logger.info("Fecha: "+citaModel.getFecha());
-				UserModel medico=userServ.findModel(idMedico);
-				if(citasServ.countByMedicoAndFecha(userServ.transform(medico), citaModel.getFecha())<10) {
-					UserDetails userDetails= (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-					UserModel paciente=userServ.findByUsername(userDetails.getUsername());
-					citaModel.setMedico(medico);
-					citaModel.setPaciente(paciente);
-					citasServ.addCita(citaModel);
-					flash.addFlashAttribute("success","Cita solicitada exitosamente");
-				}
-				else {
-					flash.addFlashAttribute("error","el medico solicitado no esta disponible ese dia");
+			//comprueba que la fecha no sea menor al dia actual
+			Date fechaActual=new Date();
+			Date fechaCita=citaModel.getFecha();
+			if(fechaActual.after(fechaCita)) {
+				flash.addFlashAttribute("error","Incorrect Date");
+			}
+			else {
+				
+				if(citaModel.getId()==0) {
+					Logger.info("Fecha: "+citaModel.getFecha());
+					UserModel medico=userServ.findModel(idMedico);
+					if(citasServ.countByMedicoAndFecha(userServ.transform(medico), citaModel.getFecha())<10) {
+						UserDetails userDetails= (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+						UserModel paciente=userServ.findByUsername(userDetails.getUsername());
+						citaModel.setMedico(medico);
+						citaModel.setPaciente(paciente);
+						citasServ.addCita(citaModel);
+						flash.addFlashAttribute("success","Cita solicitada exitosamente");
+					}
+					else {
+						flash.addFlashAttribute("error","el medico solicitado no esta disponible ese dia");
+					}
 				}
 			}
+			
 		}
-		return FORM_VIEW;
+		model.addAttribute("medicos",userServ.listAllmedicos());
+		return "redirect:/citas/form";
 	}
 	
 	

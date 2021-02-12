@@ -60,11 +60,13 @@ public class User {
 	private String role;
 	
 	private String token;
+	
+	private String verificationCode;
 
 	
 	public User(int id, String username, @Size(max = 100) String password, String nombre, List<Compra> compras,
 			List<Citas> citasPaciente, List<Citas> citasMedico, String direccion, String foto, String apellidos,
-			int edad, Date fechaalta, String especialidad, boolean enabled, String role, String token) {
+			int edad, Date fechaalta, String especialidad, boolean enabled, String role, String token, String code) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -82,11 +84,22 @@ public class User {
 		this.enabled = enabled;
 		this.role = role;
 		this.token = token;
+		this.verificationCode=code;
 	}
 
 	
 
 	public User() {}
+	
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
 
 	public List<Compra> getCompras() {
 		return compras;
